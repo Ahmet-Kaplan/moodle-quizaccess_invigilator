@@ -13,6 +13,8 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 const somethingwentwrong = props.somethingwentwrong;
 
                 var displayMediaOptions = {
+                    monitorTypeSurfaces: "include",
+                    displaySurface: "monitor",
                     video: {
                         cursor: "always"
                     },
@@ -20,7 +22,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 };
 
                 $("#invigilator-share-screen-btn").click(function() {
-                    event.preventDefault();
                     startCapture();
                 });
 
@@ -35,7 +36,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         $('#id_invigilator').css("display", 'block');
                         $("label[for='id_invigilator']").css("display", 'block');
                     } catch (err) {
-                        // Console.log("Error: " + err.toString());
+                        Console.log("Error: " + err.toString());
                         let errString = err.toString();
                         if (errString == "NotAllowedError: Permission denied") {
                             Notification.addNotification({
