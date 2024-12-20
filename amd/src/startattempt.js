@@ -58,10 +58,10 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         const videoTrack = videoElem.srcObject.getVideoTracks()[0];
                         var currentStream = videoElem.srcObject;
                         var active = currentStream.active;
-                        var settings = videoTrack.getSettings();
-                        var displaySurface = settings.displaySurface;
+                        var readyState = videoTrack.readyState;
+                        
                         // Console.log('displaySurface - updateWindow : ', displaySurface);
-                        document.getElementById('invigilator_window_surface').value = displaySurface;
+                        document.getElementById('invigilator_window_surface').value = readyState;
                         document.getElementById('invigilator_share_state').value = active;
                         var screenoff = document.getElementById('invigilator_screen_off_flag').value;
                         
@@ -96,7 +96,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                                 return false;
                             }
                             // Console.log('displaySurface', displaySurface);
-                            if (displaySurface !== "monitor") {
+                            if (displaySurface !== "live") {
                                 Notification.addNotification({
                                     message: screensharemsg,
                                     type: 'error'
@@ -184,7 +184,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     } else {
                         var screensharestatus = document.getElementById('invigilator_share_state').value;
                         var screensharemode = document.getElementById('invigilator_window_surface').value;
-                        if ((screensharemode == 'monitor') && (screensharestatus == "true")) {
+                        if ((screensharemode == 'live') && (screensharestatus == "true")) {
                             showButtons();
                         } else {
                             Notification.addNotification({
