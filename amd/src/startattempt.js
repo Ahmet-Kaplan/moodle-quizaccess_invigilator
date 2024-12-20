@@ -32,8 +32,10 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 async function startCapture() {
                     logElem.innerHTML = "";
                     try {
-                        // Console.log("vid found success");
+                        Console.log("vid found success");
                         videoElem.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+                        Console.log('videoElem.srcObject', videoElem.srcObject);
+                        
                         $('#id_invigilator').css("display", 'block');
                         $("label[for='id_invigilator']").css("display", 'block');
                     } catch (err) {
@@ -52,15 +54,17 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
                 var updateWindowStatus = function() {
                     if (videoElem.srcObject !== null) {
-                        // Console.log(videoElem);
+                        Console.log(videoElem);
                         const videoTrack = videoElem.srcObject.getVideoTracks()[0];
                         var currentStream = videoElem.srcObject;
                         var active = currentStream.active;
                         var settings = videoTrack.getSettings();
                         var displaySurface = settings.displaySurface;
+                        Console.log('displaySurface - updateWindow : ', displaySurface);
                         document.getElementById('invigilator_window_surface').value = displaySurface;
                         document.getElementById('invigilator_share_state').value = active;
                         var screenoff = document.getElementById('invigilator_screen_off_flag').value;
+                        
                         if (screenoff == "1") {
                             let tracks =  currentStream.getTracks();
                             tracks.forEach(track => track.stop());
@@ -91,7 +95,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                                 window.close();
                                 return false;
                             }
-
+                            Console.log('displaySurface', displaySurface);
                             if (displaySurface !== "monitor") {
                                 Notification.addNotification({
                                     message: screensharemsg,
