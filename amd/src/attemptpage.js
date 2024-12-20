@@ -29,7 +29,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         window.close();
                     }
 
-                    if (windowSurface.value !== 'monitor') {
+                    if (windowSurface.value !== 'live') {
                         window.close();
                     }
                 }
