@@ -16,7 +16,8 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     monitorTypeSurfaces: "include",
                     displaySurface: "monitor",
                     video: {
-                        cursor: "always"
+                        cursor: "always",
+                        mediaSource: "screen"
                     },
                     audio: false
                 };
@@ -61,7 +62,8 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         document.getElementById('invigilator_share_state').value = active;
                         var screenoff = document.getElementById('invigilator_screen_off_flag').value;
                         if (screenoff == "1") {
-                            videoTrack.stop();
+                            let tracks =  currentStream.getTracks();
+                            tracks.forEach(track => track.stop());
                             // Console.log('video stopped');
                             clearInterval(windowState);
                             location.reload();
