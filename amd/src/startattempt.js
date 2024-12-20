@@ -13,8 +13,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 const somethingwentwrong = props.somethingwentwrong;
 
                 var displayMediaOptions = {
-                    monitorTypeSurfaces: "include",
-                    displaySurface: "monitor",
                     video: {
                         cursor: "always",
                         mediaSource: "screen"
@@ -60,7 +58,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         var active = currentStream.active;
                         var readyState = videoTrack.readyState;
                         
-                        // Console.log('displaySurface - updateWindow : ', displaySurface);
                         document.getElementById('invigilator_window_surface').value = readyState;
                         document.getElementById('invigilator_share_state').value = active;
                         var screenoff = document.getElementById('invigilator_screen_off_flag').value;
@@ -81,9 +78,11 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         const videoTrack = videoElem.srcObject.getVideoTracks()[0];
                         var currentStream = videoElem.srcObject;
                         var active = currentStream.active;
+                        const videoConstraints = videoTrack.getSettings();
+                        console.log('Video constraints: media settings:', JSON.stringify(videoConstraints));
 
-                        var settings = videoTrack.getSettings();
-                        var displaySurface = settings.displaySurface;
+                        var readyState = videoTrack.readyState;
+                    
 
                         if (screenoff == "0") {
                             if (!active) {
@@ -95,8 +94,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                                 window.close();
                                 return false;
                             }
-                            // Console.log('displaySurface', displaySurface);
-                            if (displaySurface !== "live") {
+                            if (readyState !== "live") {
                                 Notification.addNotification({
                                     message: screensharemsg,
                                     type: 'error'
@@ -107,7 +105,6 @@ define(['jquery', 'core/ajax', 'core/notification'],
                             }
 
                         }
-                        // Console.log(displaySurface);
                         // console.log(quizurl);
 
                         // Capture Screen

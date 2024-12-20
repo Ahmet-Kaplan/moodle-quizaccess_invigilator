@@ -24,7 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'quizaccess_invigilator';
-$plugin->release = '1.1.1';
-$plugin->version = 2024121906;
+$plugin->release = '1.1.2';
+$plugin->version = 2024121907;
 $plugin->requires = 2019052000;
 $plugin->maturity = MATURITY_BETA;
