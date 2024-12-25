@@ -15,7 +15,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                 var displayMediaOptions = {
                     video: {
                         mediaSource: "screen",
-                        displaySurface: "monitor", // monitor, window, application, browser
+                        // displaySurface: "monitor", // monitor, window, application, browser
                         logicalSurface: true,
                         cursor: "always" // never, always, motion
                     },
@@ -185,7 +185,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     } else {
                         var screensharestatus = document.getElementById('invigilator_share_state').value;
                         var screensharemode = document.getElementById('invigilator_window_surface').value;
-                        if ((screensharemode == 'monitor') && (screensharestatus == "true")) {
+                        if ((screensharemode == 'live') && (screensharestatus == "true")) {
                             showButtons();
                         } else {
                             Notification.addNotification({
