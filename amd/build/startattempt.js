@@ -14,8 +14,10 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
                 var displayMediaOptions = {
                     video: {
-                        cursor: "always",
-                        mediaSource: "screen"
+                        mediaSource: "screen",
+                        displaySurface: "monitor", // monitor, window, application, browser
+                        logicalSurface: true,
+                        cursor: "always" // never, always, motion
                     },
                     audio: false
                 };
@@ -26,6 +28,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
                 /**
                  * Start screen capture.
+                 * Version 1.1.5
                  */
                 async function startCapture() {
                     logElem.innerHTML = "";
@@ -37,7 +40,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         $('#id_invigilator').css("display", 'block');
                         $("label[for='id_invigilator']").css("display", 'block');
                     } catch (err) {
-                        // Console.log("Error: " + err.toString());
+                        console.log("Error: " + err.toString());
                         let errString = err.toString();
                         if (errString == "NotAllowedError: Permission denied") {
                             Notification.addNotification({
@@ -181,7 +184,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     } else {
                         var screensharestatus = document.getElementById('invigilator_share_state').value;
                         var screensharemode = document.getElementById('invigilator_window_surface').value;
-                        if ((screensharemode == 'live') && (screensharestatus == "true")) {
+                        if ((screensharemode == 'monitor') && (screensharestatus == "true")) {
                             showButtons();
                         } else {
                             Notification.addNotification({
