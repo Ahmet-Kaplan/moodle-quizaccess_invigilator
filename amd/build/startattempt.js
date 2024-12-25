@@ -28,7 +28,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
 
                 /**
                  * Start screen capture.
-                 * Version 1.1.5
+                 * Version 1.1.6
                  */
                 async function startCapture() {
                     logElem.innerHTML = "";
@@ -85,6 +85,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                         console.log('Video constraints: media settings:', JSON.stringify(videoConstraints));
 
                         var readyState = videoTrack.readyState;
+                        var displaySurface = videoConstraints.displaySurface;
                     
 
                         if (screenoff == "0") {
@@ -97,7 +98,7 @@ define(['jquery', 'core/ajax', 'core/notification'],
                                 window.close();
                                 return false;
                             }
-                            if (readyState !== "live") {
+                            if (readyState !== "live" || displaySurface !== "monitor") {
                                 Notification.addNotification({
                                     message: screensharemsg,
                                     type: 'error'
