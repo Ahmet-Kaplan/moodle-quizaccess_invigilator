@@ -22,7 +22,8 @@ define(['jquery', 'core/ajax', 'core/notification'],
                     audio: false
                 };
 
-                $("#invigilator-share-screen-btn").click(function() {
+                $("#invigilator-share-screen-btn").click(async function(event) {
+                    event.preventDefault();
                     startCapture();
                 });
 

@@ -43,11 +43,7 @@ class quizaccess_invigilator extends quiz_access_rule_base
     public function is_preflight_check_required($attemptid) {
         $script = $this->get_topmost_script();
         $base = basename($script);
-        if ($base == "view.php") {
-            return true;
-        } else {
-            return false;
-        }
+        return $base == "view.php"; 
     }
 
     /**
@@ -71,7 +67,7 @@ class quizaccess_invigilator extends quiz_access_rule_base
      * @return String
      * @throws coding_exception
      */
-    public function make_modal_content() {
+    public function make_modal_content($quizform) {
         global $USER, $OUTPUT;
         $headercontent = get_string('sharescreen', 'quizaccess_invigilator');
         $header = "<h3>$headercontent</h3>";
@@ -99,7 +95,7 @@ class quizaccess_invigilator extends quiz_access_rule_base
         $screenshotdelay = get_config('quizaccess_invigilator', 'screenshotdelay');
         $screenshotwidth = get_config('quizaccess_invigilator', 'screenshotwidth');
 
-        $record = array();
+        $record = [];
         $record["courseid"] = (int)$coursedata['courseid'];
         $record["cmid"] = (int)$coursedata['cmid'];
         $record["quizid"] = (int)$coursedata['quizid'];
@@ -109,13 +105,13 @@ class quizaccess_invigilator extends quiz_access_rule_base
         $record["restartattemptcommand"] = get_string('alert:restartattemptcommand', 'quizaccess_invigilator');
         $record["somethingwentwrong"] = get_string('alert:somethingwentwrong', 'quizaccess_invigilator');
 
-        $PAGE->requires->js_call_amd('quizaccess_invigilator/startattempt', 'setup', array($record));
+        $PAGE->requires->js_call_amd('quizaccess_invigilator/startattempt', 'setup', [$record]);
         $attributesarray = $mform->_attributes;
         $attributesarray['target'] = '_blank';
         $mform->_attributes = $attributesarray;
 
         $screensharebtnlabel = get_string('sharescreenbtnlabel', 'quizaccess_invigilator');
-        $modalcontent = $this->make_modal_content();
+        $modalcontent = $this->make_modal_content($quizform);
         $actionbtns = "<button id='invigilator-share-screen-btn' style='margin: 5px'>".$screensharebtnlabel."</button>";
         $hiddenvalue = "<input id='invigilator_window_surface' value='' type='hidden'/>".
         "<input id='invigilator_share_state' value='' type='hidden'/>".
@@ -134,7 +130,7 @@ class quizaccess_invigilator extends quiz_access_rule_base
      * @throws coding_exception
      */
     public function get_courseid_cmid_from_preflight_form() {
-        $response = array();
+        $response =[];
         $response['courseid'] = $this->quiz->course;
         $response['quizid'] = $this->quiz->id;
         $response['cmid'] = $this->quiz->cmid;
@@ -188,10 +184,10 @@ class quizaccess_invigilator extends quiz_access_rule_base
     public static function add_settings_form_fields(mod_quiz_mod_form $quizform, MoodleQuickForm $mform) {
         $mform->addElement('select', 'invigilatorrequired',
             get_string('invigilatorrequired', 'quizaccess_invigilator'),
-            array(
+            [
                 0 => get_string('notrequired', 'quizaccess_invigilator'),
                 1 => get_string('invigilatorrequiredoption', 'quizaccess_invigilator'),
-            ));
+            ]);
         $mform->addHelpButton('invigilatorrequired', 'invigilatorrequired', 'quizaccess_invigilator');
     }
 
@@ -206,9 +202,9 @@ class quizaccess_invigilator extends quiz_access_rule_base
     public static function save_settings($quiz) {
         global $DB;
         if (empty($quiz->invigilatorrequired)) {
-            $DB->delete_records('quizaccess_invigilator', array('quizid' => $quiz->id));
+            $DB->delete_records('quizaccess_invigilator', ['quizid' => $quiz->id]);
         } else {
-            if (!$DB->record_exists('quizaccess_invigilator', array('quizid' => $quiz->id))) {
+            if (!$DB->record_exists('quizaccess_invigilator', ['quizid' => $quiz->id])) {
                 $record = new stdClass();
                 $record->quizid = $quiz->id;
                 $record->invigilatorrequired = 1;
@@ -227,7 +223,7 @@ class quizaccess_invigilator extends quiz_access_rule_base
      */
     public static function delete_settings($quiz) {
         global $DB;
-        $DB->delete_records('quizaccess_invigilator', array('quizid' => $quiz->id));
+        $DB->delete_records('quizaccess_invigilator', ['quizid' => $quiz->id]);
     }
 
     /**
@@ -251,10 +247,10 @@ class quizaccess_invigilator extends quiz_access_rule_base
      *        plugin name, to avoid collisions.
      */
     public static function get_settings_sql($quizid) {
-        return array(
+        return [
             'invigilatorrequired',
             'LEFT JOIN {quizaccess_invigilator} invigilator ON invigilator.quizid = quiz.id',
-            array());
+            [], ];
     }
 
     /**
@@ -268,13 +264,13 @@ class quizaccess_invigilator extends quiz_access_rule_base
      */
     public function description() {
         global $PAGE;
-        $record = array();
-        $record["allowscreenshare"] = get_string('warning:allowscreenshare', 'quizaccess_invigilator');
-        $record["screensharemsg"] = get_string('alert:screensharemsg', 'quizaccess_invigilator');
-        $record["restartattemptcommand"] = get_string('alert:restartattemptcommand', 'quizaccess_invigilator');
-        $record["somethingwentwrong"] = get_string('alert:somethingwentwrong', 'quizaccess_invigilator');
+        $record = new stdClass();
+        $record->allowscreenshare = get_string('warning:allowscreenshare', 'quizaccess_invigilator');
+        $record->screensharemsg = get_string('alert:screensharemsg', 'quizaccess_invigilator');
+        $record->restartattemptcommand = get_string('alert:restartattemptcommand', 'quizaccess_invigilator');
+        $record->somethingwentwrong = get_string('alert:somethingwentwrong', 'quizaccess_invigilator');
 
-        $PAGE->requires->js_call_amd('quizaccess_invigilator/startattempt', 'init', array($record));
+        $PAGE->requires->js_call_amd('quizaccess_invigilator/startattempt', 'init', [$record]);
         $messages = [get_string('invigilatorheader', 'quizaccess_invigilator')];
 
         $messages[] = $this->get_download_config_button();
@@ -303,13 +299,13 @@ class quizaccess_invigilator extends quiz_access_rule_base
             // Get Screenshot Delay and Image Width.
             $screenshotdelay = get_config('quizaccess_invigilator', 'screenshotdelay');
             $screenshotwidth = get_config('quizaccess_invigilator', 'screenshotwidth');
-            $quizurl = new moodle_url("/mod/quiz/view.php", array("id" => $this->quiz->cmid));
+            $quizurl = new moodle_url("/mod/quiz/view.php", ["id" => $cmid]);
 
             $record = new stdClass();
             $record->screenshotdelay = $screenshotdelay;
             $record->screenshotwidth = $screenshotwidth;
             $record->quizurl = $quizurl->__toString();
-            $page->requires->js_call_amd('quizaccess_invigilator/attemptpage', 'setup', array($record));
+            $page->requires->js_call_amd('quizaccess_invigilator/attemptpage', 'setup', [$record]);
         }
     }
 
