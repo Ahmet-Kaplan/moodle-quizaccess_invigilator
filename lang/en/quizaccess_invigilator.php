@@ -34,6 +34,7 @@ $string['youmustagree'] = 'You must agree to validate your identity before conti
 $string['notrequired'] = 'not required';
 $string['invigilatorrequiredoption'] = 'must be acknowledged before starting an attempt';
 $string['invigilatorrequired'] = 'Screenshot capture validation';
+$string['invigilatorrequired_help'] = 'If enabled, students must agree to screenshot capture validation before starting the quiz attempt.';
 $string['warning:allowscreenshare'] = 'Please allow screen share.';
 $string['invigilatorheader'] = '<strong>To continue with this quiz attempt you must share your screen. You must choose entire monitor in screen sharing option.</strong>';
 $string['picturesreport'] = 'View invigilator report';

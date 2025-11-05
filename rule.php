@@ -41,9 +41,36 @@ class quizaccess_invigilator extends quiz_access_rule_base
      * @return bool
      */
     public function is_preflight_check_required($attemptid) {
+        global $USER, $DB;
+        
+        // Only show preflight check when starting a new attempt
+        if ($attemptid) {
+            // If we have an attempt ID, we're continuing an existing attempt
+            return false;
+        }
+        
+        // Check if user has any attempts for this quiz
+        $existing_attempts = $DB->count_records('quiz_attempts', [
+            'quiz' => $this->quiz->id,
+            'userid' => $USER->id
+        ]);
+        
+        if ($existing_attempts > 0) {
+            // User has attempted this quiz before, don't show preflight again
+            return false;
+        }
+        
+        // Check if this is a POST request (form submission)
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            return false;
+        }
+        
+        // Check if we're on the right page
         $script = $this->get_topmost_script();
         $base = basename($script);
-        return $base == "view.php"; 
+        
+        // Only show on view.php for new attempts
+        return $base == "view.php";
     }
 
     /**

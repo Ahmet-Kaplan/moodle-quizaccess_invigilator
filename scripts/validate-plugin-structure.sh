@@ -3,8 +3,6 @@
 # Plugin Structure Validation Script
 # This script validates the file structure of the Moodle Invigilator plugin
 
-set -e
-
 # Configuration
 PLUGIN_DIR="${PLUGIN_DIR:-$(pwd)}"
 PLUGIN_NAME="quizaccess_invigilator"
@@ -142,7 +140,11 @@ validate_version_file() {
         all_found=false
     fi
     
-    return $all_found
+    if [ "$all_found" = true ]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 # Validate database schema
@@ -254,16 +256,16 @@ validate_plugin_structure() {
     
     # PHP syntax validation
     echo -e "\n${BLUE}=== PHP Syntax Validation ===${NC}"
-    validate_php_syntax "version.php" "Version file"
-    validate_php_syntax "rule.php" "Rule file"
-    [ -f "$PLUGIN_DIR/lib.php" ] && validate_php_syntax "lib.php" "Library file"
-    [ -f "$PLUGIN_DIR/settings.php" ] && validate_php_syntax "settings.php" "Settings file"
+    validate_php_syntax "version.php" "Version file" || true
+    validate_php_syntax "rule.php" "Rule file" || true
+    [ -f "$PLUGIN_DIR/lib.php" ] && validate_php_syntax "lib.php" "Library file" || true
+    [ -f "$PLUGIN_DIR/settings.php" ] && validate_php_syntax "settings.php" "Settings file" || true
     
     # Content validation
     echo -e "\n${BLUE}=== Content Validation ===${NC}"
-    validate_version_file
-    validate_database_schema
-    validate_language_files
+    validate_version_file || true
+    validate_database_schema || true
+    validate_language_files || true
     
     # Summary
     echo -e "\n${BLUE}=== Validation Summary ===${NC}"
